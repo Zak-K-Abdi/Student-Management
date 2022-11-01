@@ -2,154 +2,184 @@
 #include<string>
 
 using namespace std;
-
-class Node{
+ 
+// Node Class
+class Node {
 public:
-    int ID;
-    int Marks;
+    int roll;
     string Name;
-    string Department;
-    Node *Next;
+    string Dept;
+    int Marks;
+    Node* next;
 };
-
-//Global variable storing the head of the list
-Node *head = new Node();
-
-// Checks if the student is in the list.
-bool check(int x){
-    if(!head){
+ 
+// Stores the head of the Linked List
+Node* head = new Node();
+ 
+// Check Function to check that if
+// Record Already Exist or Not
+bool check(int x)
+{
+    // Base Case
+    if (head == NULL)
         return false;
-    }
-
-    Node *t = new Node();
+ 
+    Node* t = new Node;
     t = head;
-
-    while(t){
-        if(t->ID == x)
+ 
+    // Traverse the Linked List
+    while (t != NULL) {
+        if (t->roll == x)
             return true;
-
-        t = t->Next;
+        t = t->next;
     }
-
+ 
     return false;
 }
-
-// Inserts student in the linked list.
-void insert_info(int ID, int Marks, string Name, string Department){
-    if(check(ID)){
-        cout << "The Student with this record already exists.\n";
+ 
+// Function to insert the record
+void Insert_Record(int roll, string Name,
+                   string Dept, int Marks)
+{
+    // if Record Already Exist
+    if (check(roll)) {
+        cout << "Student with this "
+             << "record Already Exists\n";
         return;
     }
-
-    //Creating a new node to add into the list.
-
-    Node *t = new Node();
-    t->ID = ID;
-    t->Marks = Marks;
+ 
+    // Create new Node to Insert Record
+    Node* t = new Node();
+    t->roll = roll;
     t->Name = Name;
-    t->Department = Department;
-    t->Next = NULL;
-
-    //inserts student at the beginning
-    if(head == NULL || head->ID >= t->ID){
-        t->Next = head;
+    t->Dept = Dept;
+    t->Marks = Marks;
+    t->next = NULL;
+ 
+    // Insert at Begin
+    if (head == NULL
+        || (head->roll >= t->roll)) {
+        t->next = head;
         head = t;
     }
-
-    //inserts student at the middle or end
-    else{
-        Node *c = head;
-        while(c->Next != NULL && c->Next->ID < t->ID){
-            c = c->Next;
+ 
+    // Insert at middle or End
+    else {
+        Node* c = head;
+        while (c->next != NULL
+               && c->next->roll < t->roll) {
+            c = c->next;
         }
+        t->next = c->next;
+        c->next = t;
     }
-
-    cout << "Record Inserted Sucessfully \n";
-
+ 
+    cout << "Record Inserted "
+         << "Successfully\n";
 }
-
-//Searches for the student in the list using the ID.
-void search(int ID){
-    if(!head){
-        cout << "No Such Record Available.\n";
+ 
+// Function to search record for any
+// students Record with roll number
+void Search_Record(int roll)
+{
+    // if head is NULL
+    if (!head) {
+        cout << "No such Record "
+             << "Available\n";
         return;
     }
-
-    else{
-        Node *t = head;
-        while(t){
-            if(t->ID == ID){
-                cout << "ID Number\t" << t->ID << endl;
-                cout << "Name\t\t" << t->Name << endl;
-                cout << "Department\t" << t->Department << endl;
-                cout << "Marks\t\t" << t->Marks << endl;
+ 
+    // Otherwise
+    else {
+        Node* p = head;
+        while (p) {
+            if (p->roll == roll) {
+                cout << "Roll Number\t"
+                     << p->roll << endl;
+                cout << "Name\t\t"
+                     << p->Name << endl;
+                cout << "Department\t"
+                     << p->Dept << endl;
+                cout << "Marks\t\t"
+                     << p->Marks << endl;
                 return;
             }
-            t = t->Next;
+            p = p->next;
         }
-
-        if(t == NULL){
-            cout << "No Record Available.\n";
-        }
+ 
+        if (p == NULL)
+            cout << "No such Record "
+                 << "Available\n";
     }
 }
-
-//Deletes student information if the info is present in the list.
-int delete_info(int ID){
-    Node *t = head;
-    Node *p = NULL;
-
-    if(t && t->ID == ID){
-        head = t->Next;
+ 
+// Function to delete record students
+// record with given roll number
+// if it exist
+int Delete_Record(int roll)
+{
+    Node* t = head;
+    Node* p = NULL;
+ 
+    // Deletion at Begin
+    if (t != NULL
+        && t->roll == roll) {
+        head = t->next;
         delete t;
-
-        cout << "Record Deleted.\n";
+ 
+        cout << "Record Deleted "
+             << "Successfully\n";
         return 0;
     }
-
-    while(t && t->ID != ID){
+ 
+    // Deletion Other than Begin
+    while (t != NULL && t->roll != roll) {
         p = t;
-        t = t->Next;
+        t = t->next;
     }
-
-    if(!t){
-        cout << "Record does not exist.\n";
+    if (t == NULL) {
+        cout << "Record does not Exist\n";
         return -1;
-    }    
-    p->Next = t->Next;
-
-    delete t;
-
-    cout << "Record Sucessfully deleted.\n";
-    return 0;
-}
-
-//Displays the students' info
-void show_info(){
-    Node *p = head;
-    if(p == NULL){
-        cout << "No record Available.\n";
-        return;
+        p->next = t->next;
+ 
+        delete t;
+        cout << "Record Deleted "
+             << "Successfully\n";
+ 
+        return 0;
     }
-
-    else{
-        cout << "Index\tName\tDepartment\tMarks\n";
-
-        while(p != NULL){
-            cout << p->ID << "\t"
+}
+ 
+// Function to display the Student's
+// Record
+void Show_Record()
+{
+    Node* p = head;
+    if (p == NULL) {
+        cout << "No Record "
+             << "Available\n";
+    }
+    else {
+        cout << "Index\tName\tCourse"
+             << "\tMarks\n";
+ 
+        // Until p is not NULL
+        while (p != NULL) {
+            cout << p->roll << "    \t"
                  << p->Name << "\t"
-                 << p->Department << "\t"
+                 << p->Dept << "\t"
                  << p->Marks << endl;
-            p = p->Next;
+            p = p->next;
         }
     }
 }
-
-int main(){
-
+ 
+// Driver code
+int main()
+{
     head = NULL;
-    string Name, Department;
-    int ID, Marks;
+    string Name, Course;
+    int Roll, Marks;
  
     // Menu-driven program
     while (true) {
@@ -167,28 +197,28 @@ int main(){
         if (Choice == 1) {
             cout << "Enter Name of Student\n";
             cin >> Name;
-            cout << "Enter ID Number of Student\n";
-            cin >> ID;
+            cout << "Enter Roll Number of Student\n";
+            cin >> Roll;
             cout << "Enter Course of Student \n";
-            cin >> Department;
+            cin >> Course;
             cout << "Enter Total Marks of Student\n";
             cin >> Marks;
-            insert_info(ID, Marks, Name, Department);
+            Insert_Record(Roll, Name, Course, Marks);
         }
         else if (Choice == 2) {
-            cout << "Enter ID Number of Student whose "
+            cout << "Enter Roll Number of Student whose "
                     "record is to be deleted\n";
-            cin >> ID;
-            delete_info(ID);
+            cin >> Roll;
+            Delete_Record(Roll);
         }
         else if (Choice == 3) {
-            cout << "Enter ID Number of Student whose "
+            cout << "Enter Roll Number of Student whose "
                     "record you want to Search\n";
-            cin >> ID;
-            search(ID);
+            cin >> Roll;
+            Search_Record(Roll);
         }
         else if (Choice == 4) {
-            show_info();
+            Show_Record();
         }
         else if (Choice == 5) {
             exit(0);
